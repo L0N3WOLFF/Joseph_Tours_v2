@@ -12,6 +12,97 @@ import type { Tour } from '../types.ts';
 const TripPlanner: React.FC = () => {
     const { t } = useApp();
     
+    // La data de los tours se define directamente en el componente.
+    const allTours = useMemo((): Tour[] => [
+      {
+        id: 'pasadia1',
+        category: t('tours_filter_daytrip'),
+        image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Galeria_04.jpg',
+        title: t('pasadia1_title'),
+        legend: t('pasadia1_legend'),
+        details: {
+          includes: [t('pasadia1_inc_1'),t('pasadia1_inc_2'),t('pasadia1_inc_3'),t('pasadia1_inc_4'),t('pasadia1_inc_5'),t('pasadia1_inc_6'),t('pasadia1_inc_7'),t('pasadia1_inc_8')],
+          not_included: [t('pasadia1_ninc_1'),t('pasadia1_ninc_2')],
+          pickup: t('pasadia_pickup'),
+        },
+      },
+      {
+        id: 'pasadia2',
+        category: t('tours_filter_daytrip'),
+        image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Galeria_02.jpg',
+        title: t('pasadia2_title'),
+        legend: t('pasadia2_legend'),
+        details: {
+          includes: [t('pasadia2_inc_1'),t('pasadia2_inc_2'),t('pasadia2_inc_3'),t('pasadia2_inc_4'),t('pasadia2_inc_5'),t('pasadia2_inc_6'),t('pasadia2_inc_7'),t('pasadia2_inc_8'),t('pasadia2_inc_9')],
+          not_included: [t('pasadia2_ninc_1')],
+          pickup: t('pasadia_pickup'),
+        },
+      },
+      {
+        id: 'pasadia3',
+        category: t('tours_filter_daytrip'),
+        image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Galeria_01.jpg',
+        title: t('pasadia3_title'),
+        legend: t('pasadia3_legend'),
+        details: {
+          includes: [t('pasadia3_inc_1'),t('pasadia3_inc_2'),t('pasadia3_inc_3'),t('pasadia3_inc_4'),t('pasadia3_inc_5'),t('pasadia3_inc_6'),t('pasadia3_inc_7'),t('pasadia3_inc_8')],
+          not_included: [t('pasadia3_ninc_1')],
+          pickup: t('pasadia_pickup'),
+        },
+      },
+      {
+        id: 'reserva1',
+        category: t('tours_filter_booking'),
+        image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Galeria_18.png',
+        title: t('reserva1_title'),
+        legend: t('reserva1_legend'),
+        details: {
+          includes: [t('reserva1_inc_1'),t('reserva1_inc_2'),t('reserva1_inc_3'),t('reserva1_inc_4'),t('reserva1_inc_5'),t('reserva1_inc_6'),t('reserva1_inc_7'),t('reserva1_inc_8')],
+          not_included: [t('reserva1_ninc_1')],
+          pickup: t('pasadia_pickup'),
+        },
+      },
+      {
+        id: 'reserva2',
+        category: t('tours_filter_booking'),
+        image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Galeria_19.png',
+        title: t('reserva2_title'),
+        legend: t('reserva2_legend'),
+        details: {
+          includes: [t('reserva2_inc_1'),t('reserva2_inc_2'),t('reserva2_inc_3'),t('reserva2_inc_4'),t('reserva2_inc_5'),t('reserva2_inc_6'),t('reserva2_inc_7'),t('reserva2_inc_8')],
+          not_included: [t('reserva2_ninc_1')],
+          pickup: t('pasadia_pickup'),
+        },
+      },
+      {
+        id: 'estadia1',
+        category: t('tours_filter_stay'),
+        image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Galeria_03.jpg',
+        title: t('estadia1_title'),
+        legend: t('estadia1_legend'),
+        details: {
+          includes: [t('estadia_inc_1'),t('estadia_inc_2'),t('estadia_inc_3'),t('estadia_inc_4'),t('estadia_inc_5'),t('estadia_inc_6'),t('estadia_inc_7'),t('estadia_inc_8')],
+          not_included: [],
+          pickup: t('pasadia_pickup'),
+          additional_info: [t('estadia1_add_1'), t('estadia1_add_2')]
+        },
+      },
+      {
+        id: 'estadia2',
+        category: t('tours_filter_stay'),
+        image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Galeria_20.png',
+        title: t('estadia2_title'),
+        legend: t('estadia2_legend'),
+        details: {
+          includes: [t('estadia_inc_1'),t('estadia_inc_2'),t('estadia_inc_3'),t('estadia_inc_4'),t('estadia_inc_5'),t('estadia_inc_6'),t('estadia_inc_7'),t('estadia_inc_8')],
+          not_included: [],
+          pickup: t('pasadia_pickup'),
+          additional_info: [t('estadia2_add_1'), t('estadia2_add_2')]
+        },
+      },
+    ], [t]);
+
+
     // Define los filtros disponibles. Las claves de traducción deben existir en translations.ts
     const filters = useMemo(() => [
       t('tours_filter_all'), 
@@ -24,99 +115,6 @@ const TripPlanner: React.FC = () => {
     const [activeFilter, setActiveFilter] = useState(filters[0]);
     // Estado para gestionar el tour seleccionado y la visibilidad del modal.
     const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
-
-    // Memoriza la lista de todos los tours para evitar recrearla en cada renderizado.
-    const allTours: Tour[] = useMemo(() => [
-        // Pasadías
-        {
-          id: 'pasadia1',
-          category: t('tours_filter_daytrip'),
-          image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Pasadia_01.png',
-          title: t('pasadia1_title'),
-          legend: t('pasadia1_legend'),
-          details: {
-            includes: [t('pasadia1_inc_1'), t('pasadia1_inc_2'), t('pasadia1_inc_3'), t('pasadia1_inc_4'), t('pasadia1_inc_5'), t('pasadia1_inc_6'), t('pasadia1_inc_7'), t('pasadia1_inc_8')],
-            not_included: [t('pasadia1_ninc_1'), t('pasadia1_ninc_2')],
-            pickup: t('pasadia_pickup'),
-          }
-        },
-        {
-          id: 'pasadia2',
-          category: t('tours_filter_daytrip'),
-          image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Pasad%C3%ADa_02.png',
-          title: t('pasadia2_title'),
-          legend: t('pasadia2_legend'),
-          details: {
-            includes: [t('pasadia2_inc_1'), t('pasadia2_inc_2'), t('pasadia2_inc_3'), t('pasadia2_inc_4'), t('pasadia2_inc_5'), t('pasadia2_inc_6'), t('pasadia2_inc_7'), t('pasadia2_inc_8'), t('pasadia2_inc_9')],
-            not_included: [t('pasadia2_ninc_1')],
-            pickup: t('pasadia_pickup'),
-          }
-        },
-        {
-          id: 'pasadia3',
-          category: t('tours_filter_daytrip'),
-          image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Pasad%C3%ADa_03.jpg',
-          title: t('pasadia3_title'),
-          legend: t('pasadia3_legend'),
-          details: {
-            includes: [t('pasadia3_inc_1'), t('pasadia3_inc_2'), t('pasadia3_inc_3'), t('pasadia3_inc_4'), t('pasadia3_inc_5'), t('pasadia3_inc_6'), t('pasadia3_inc_7'), t('pasadia3_inc_8')],
-            not_included: [t('pasadia3_ninc_1')],
-            pickup: t('pasadia_pickup'),
-          }
-        },
-        // Reservas
-        {
-          id: 'reserva1',
-          category: t('tours_filter_booking'),
-          image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Pasad%C3%ADa_04_R.png',
-          title: t('reserva1_title'),
-          legend: t('reserva1_legend'),
-          details: {
-            includes: [t('reserva1_inc_1'), t('reserva1_inc_2'), t('reserva1_inc_3'), t('reserva1_inc_4'), t('reserva1_inc_5'), t('reserva1_inc_6'), t('reserva1_inc_7'), t('reserva1_inc_8')],
-            not_included: [t('reserva1_ninc_1')],
-            pickup: t('pasadia_pickup'),
-          }
-        },
-        {
-          id: 'reserva2',
-          category: t('tours_filter_booking'),
-          image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Pasad%C3%ADa_05_R.jpg',
-          title: t('reserva2_title'),
-          legend: t('reserva2_legend'),
-          details: {
-            includes: [t('reserva2_inc_1'), t('reserva2_inc_2'), t('reserva2_inc_3'), t('reserva2_inc_4'), t('reserva2_inc_5'), t('reserva2_inc_6'), t('reserva2_inc_7'), t('reserva2_inc_8')],
-            not_included: [t('reserva2_ninc_1')],
-            pickup: t('pasadia_pickup'),
-          }
-        },
-        // Estadías
-        {
-          id: 'estadia1',
-          category: t('tours_filter_stay'),
-          image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Estadia_1.jpg',
-          title: t('estadia1_title'),
-          legend: t('estadia1_legend'),
-          details: {
-            includes: [t('estadia_inc_1'), t('estadia_inc_2'), t('estadia_inc_3'), t('estadia_inc_4'), t('estadia_inc_5'), t('estadia_inc_6'), t('estadia_inc_7'), t('estadia_inc_8')],
-            additional_info: [t('estadia1_add_1'), t('estadia1_add_2')],
-            not_included: [],
-            pickup: ''
-          }
-        },
-        {
-          id: 'estadia2',
-          category: t('tours_filter_stay'),
-          image: 'https://raw.githubusercontent.com/L0N3WOLFF/Testing_Images_Gallery/c062d59f76fe9861020b876bfea7028037318c98/Project-Tours/Estadia_2.jpg',
-          title: t('estadia2_title'),
-          legend: t('estadia2_legend'),
-          details: {
-            includes: [t('estadia_inc_1'), t('estadia_inc_2'), t('estadia_inc_3'), t('estadia_inc_4'), t('estadia_inc_5'), t('estadia_inc_6'), t('estadia_inc_7'), t('estadia_inc_8')],
-            additional_info: [t('estadia2_add_1'), t('estadia2_add_2')],
-            not_included: [],
-            pickup: ''
-          }
-        }
-    ], [t]);
 
     // Memoriza la lista de tours filtrados. Se recalcula solo si el filtro o la lista de tours cambia.
     const filteredTours = useMemo(() => {
@@ -186,7 +184,7 @@ const TripPlanner: React.FC = () => {
                   </div>
                   <button 
                     onClick={() => handleOpenModal(tour)}
-                    className="mt-auto w-full bg-amber-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-amber-900 transition-colors duration-300"
+                    className="mt-auto w-full bg-amber-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-amber-900 transition-colors"
                   >
                     {t('tour_card_view_details')}
                   </button>
@@ -196,8 +194,8 @@ const TripPlanner: React.FC = () => {
           </div>
         </div>
       </section>
-      
-      {/* Renderiza el modal solo si hay un tour seleccionado */}
+
+      {/* Renderiza el modal si hay un tour seleccionado */}
       {selectedTour && (
         <TourModal tour={selectedTour} onClose={handleCloseModal} />
       )}
